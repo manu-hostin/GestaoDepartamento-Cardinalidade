@@ -6,6 +6,8 @@ import com.senai.gestaoDepartamento.model.Funcionario;
 import com.senai.gestaoDepartamento.service.FuncionarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,27 +20,32 @@ public class FuncionarioController {
     private final FuncionarioService service;
 
     @PostMapping
-    public FuncionarioResposta cadastrarFuncionario (@Valid @RequestBody FuncionarioRequisicao requisicao) {
-        return service.cadastrarFuncionario(requisicao);
+    public ResponseEntity<FuncionarioResposta> cadastrarFuncionario (@Valid @RequestBody FuncionarioRequisicao requisicao) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.cadastrarFuncionario(requisicao));
     }
 
     @GetMapping
-    public List<FuncionarioResposta> buscarFuncionarios () {
-        return service.listarFuncionarios();
+    public ResponseEntity<List<FuncionarioResposta>> buscarFuncionarios () {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.listarFuncionarios());
     }
 
     @GetMapping("/{id}")
-    public FuncionarioResposta buscarFuncionario (@PathVariable Long id) {
-        return service.buscarFuncionario(id);
+    public ResponseEntity<FuncionarioResposta> buscarFuncionario (@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.buscarFuncionario(id));
     }
 
     @GetMapping("/busca")
-    public FuncionarioResposta buscarPorIdDptoNome (@RequestParam Long idDepto, @RequestParam String nome) {
-        return service.findByIdDeptoAndNome(idDepto, nome);
+    public ResponseEntity<FuncionarioResposta> buscarPorIdDptoNome (@RequestParam Long idDepto, @RequestParam String nome) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.findByIdDeptoAndNome(idDepto, nome));
     }
 
     @GetMapping("/buscaFunc")
-    public FuncionarioResposta buscarPorIdNome (@RequestParam Long id, @RequestParam String nome) {
-        return service.findByIdAndNome(id, nome);
+    public ResponseEntity<FuncionarioResposta> buscarPorIdNome (@RequestParam Long id, @RequestParam String nome) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.findByIdAndNome(id, nome));
     }
 }
